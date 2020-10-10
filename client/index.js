@@ -1,9 +1,11 @@
 class Calc {
-  constructor(prevOpTextElement, currentOpTextElement) {
+  constructor(prevOpTextElement, currentOpTextElement, expressionTextElement) {
     this.prevOpTextElement = prevOpTextElement;
     this.currentOpTextElement = currentOpTextElement;
+    this.expressionTextElement = expressionTextElement;
     this.readyToReset = false;
     this.clear();
+    this.getHistoryAndRender();
   }
 
   clear() {
@@ -89,6 +91,20 @@ class Calc {
       this.prevOpTextElement.innerText = '';
     }
   }
+
+  getHistoryAndRender() {
+    fetch('/api/history')
+      .then((res) => res.json())
+      .then((data) => this.renderHistory(data));
+  }
+
+  renderHistory(data) {
+    this.expressionTextElement.innerHTML = '';
+    data.map((element) => {
+      this.expressionTextElement.innerHTML += `<li>${element.expression}</li>`;
+      console.log(element.expression);
+    });
+  }
 }
 
 const numButtons = document.querySelectorAll('[data-num]');
@@ -98,8 +114,13 @@ const deleteButton = document.querySelector('[data-del]');
 const acButton = document.querySelector('[data-ac]');
 const prevOpTextElement = document.querySelector('[data-prev-op]');
 const currentOpTextElement = document.querySelector('[data-current-op');
+const expressionTextElement = document.querySelector('[data-expressions]');
 
-const calculator = new Calc(prevOpTextElement, currentOpTextElement);
+const calculator = new Calc(
+  prevOpTextElement,
+  currentOpTextElement,
+  expressionTextElement
+);
 
 numButtons.forEach((button) => {
   button.addEventListener('click', () => {
