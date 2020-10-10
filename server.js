@@ -6,11 +6,11 @@ const app = express();
 connectDB();
 
 app.use(express.json({ extended: false }));
+app.use(express.static('client'));
 
 app.use('/api/history', require('./routes/history'));
-
 app.use('/', (req, res) => {
-  res.send('<h1>Hello World!</h1>');
+  res.sendFile(__dirname + '/client/index.html');
 });
 
 app.listen(5000, () => {
