@@ -32,6 +32,6 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 5000;
 
-http.listen(5000, () => {
+http.listen(PORT, () => {
   console.log('Server listening on port 5000...');
 });
