@@ -33,7 +33,6 @@ class Calc {
 
   compute() {
     let computation;
-    let expression;
     const prev = parseFloat(this.prevOp);
     const current = parseFloat(this.currentOp);
     const op = this.op;
@@ -42,15 +41,19 @@ class Calc {
     switch (op) {
       case '+':
         computation = prev + current;
+        this.marshallAndSend(prev, op, current, computation);
         break;
       case '-':
         computation = prev - current;
+        this.marshallAndSend(prev, op, current, computation);
         break;
       case '*':
         computation = prev * current;
+        this.marshallAndSend(prev, op, current, computation);
         break;
       case '÷':
         computation = prev / current;
+        this.marshallAndSend(prev, op, current, computation);
         break;
       default:
         return;
@@ -103,6 +106,18 @@ class Calc {
     data.map((element) => {
       this.expressionTextElement.innerHTML += `<li>${element.expression}</li>`;
       console.log(element.expression);
+    });
+  }
+
+  marshallAndSend(prev, op, current, computation) {
+    let expression = {
+      expression: `${prev.toString()} ${op.toString()} ${current.toString()} = ${computation.toString()}`,
+    };
+    expression = JSON.stringify(expression);
+    window.fetch('/api/history', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: expression,
     });
   }
 }
