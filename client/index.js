@@ -105,7 +105,6 @@ class Calc {
     this.expressionTextElement.innerHTML = '';
     data.map((element) => {
       this.expressionTextElement.innerHTML += `<li>${element.expression}</li>`;
-      console.log(element.expression);
     });
   }
 

@@ -20,6 +20,10 @@
     "config": "^3.3.2",
     "express": "^4.17.1",
     "mongoose": "^5.10.9",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "socket.io": "^2.3.0"
+  },
+  "engines": {
+    "node": "13.7.0"
   }
 }
