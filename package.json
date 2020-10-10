@@ -1,0 +1,25 @@
+{
+  "name": "sezzle-calc",
+  "version": "1.0.0",
+  "description": "Real-Time Calculator for Sezzle",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "MongoDB",
+    "JavaScript",
+    "NodeJS",
+    "ExpressJS",
+    "SocketIO"
+  ],
+  "author": "PFurtak",
+  "license": "ISC",
+  "dependencies": {
+    "config": "^3.3.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9",
+    "nodemon": "^2.0.4"
+  }
+}
