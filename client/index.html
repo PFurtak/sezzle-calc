@@ -37,6 +37,22 @@
         =
       </button>
     </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="index.js"></script>
+    <script>
+      $(function () {
+        var socket = io();
+        $('#equals').click(function (e) {
+          e.preventDefault();
+          socket.emit('post', 'posted to DB');
+          calculator.getHistoryAndRender();
+          return false;
+        });
+        socket.on('post', function (msg) {
+          calculator.getHistoryAndRender();
+        });
+      });
+    </script>
   </body>
 </html>
