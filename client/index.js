@@ -5,7 +5,7 @@ class Calc {
     this.expressionTextElement = expressionTextElement;
     this.readyToReset = false;
     this.clear();
-    this.getHistoryAndRender();
+    this.renderHistory();
   }
 
   clear() {
@@ -32,7 +32,7 @@ class Calc {
   }
 
   compute() {
-    let computation;
+    let computation, expression;
     const prev = parseFloat(this.prevOp);
     const current = parseFloat(this.currentOp);
     const op = this.op;
@@ -41,19 +41,23 @@ class Calc {
     switch (op) {
       case '+':
         computation = prev + current;
-        this.marshallAndSend(prev, op, current, computation);
+        expression = this.buildExpression(prev, op, current, computation);
+        this.postToHistory(expression);
         break;
       case '-':
         computation = prev - current;
-        this.marshallAndSend(prev, op, current, computation);
+        expression = this.buildExpression(prev, op, current, computation);
+        this.postToHistory(expression);
         break;
       case '*':
         computation = prev * current;
-        this.marshallAndSend(prev, op, current, computation);
+        expression = this.buildExpression(prev, op, current, computation);
+        this.postToHistory(expression);
         break;
       case '÷':
         computation = prev / current;
-        this.marshallAndSend(prev, op, current, computation);
+        expression = this.buildExpression(prev, op, current, computation);
+        this.postToHistory(expression);
         break;
       default:
         return;
@@ -95,24 +99,29 @@ class Calc {
     }
   }
 
-  getHistoryAndRender() {
-    fetch('/api/history')
-      .then((res) => res.json())
-      .then((data) => this.renderHistory(data));
+  async getHistory() {
+    const res = await fetch('/api/history');
+    const data = await res.json();
+    return data;
   }
 
-  renderHistory(data) {
+  async renderHistory() {
+    const data = await this.getHistory();
     this.expressionTextElement.innerHTML = '';
     data.map((element) => {
       this.expressionTextElement.innerHTML += `<li>${element.expression}</li>`;
     });
   }
 
-  marshallAndSend(prev, op, current, computation) {
-    let expression = {
+  buildExpression(prev, op, current, computation) {
+    let expressionObj = {
       expression: `${prev.toString()} ${op.toString()} ${current.toString()} = ${computation.toString()}`,
     };
-    expression = JSON.stringify(expression);
+    expressionObj = JSON.stringify(expressionObj);
+    return expressionObj;
+  }
+
+  postToHistory(expression) {
     window.fetch('/api/history', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
