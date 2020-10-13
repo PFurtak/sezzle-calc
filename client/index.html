@@ -46,11 +46,11 @@
         $('#equals').click(function (e) {
           e.preventDefault();
           socket.emit('post', 'posted to DB');
-          calculator.getHistoryAndRender();
+          calculator.renderHistory();
           return false;
         });
         socket.on('post', function (msg) {
-          calculator.getHistoryAndRender();
+          calculator.renderHistory();
         });
       });
     </script>
