@@ -76,7 +76,7 @@ The steps above will connect the app to your own instance to of MongoDB.
 
 - Remove JQuery and update client socketIO code. This was my first time working with SocketIO, so I adapted the documentation to get a working result. If I had more time, I would local install the socketIO client library, and refactor the socket scripts out of the HTML script tag. The socket emit should also occur at computation, rather than on click of the equals button. I would also opt to use plain JavaScript rather than JQuery.
 
-- Break up the functions getHistoryAndRender and marshallAndSend:
+- ~~Break up the functions getHistoryAndRender and marshallAndSend:~~
 
 ```javascript
 
@@ -106,7 +106,44 @@ marshallAndSend(prev, op, current, computation) {
   }
 ```
 
-We could gain much better testability, scalability, and more efficient code re-use by making these functions do one thing and do it well.
+~~We could gain much better testability, scalability, and more efficient code re-use by making these functions do one thing and do it well.~~
+
+Refactored to:
+
+```javascript
+
+async getHistory() {
+    const res = await fetch('/api/history');
+    const data = await res.json();
+    return data;
+  }
+
+  async renderHistory() {
+    const data = await this.getHistory();
+    this.expressionTextElement.innerHTML = '';
+    data.map((element) => {
+      this.expressionTextElement.innerHTML += `<li>${element.expression}</li>`;
+    });
+  }
+
+  buildExpression(prev, op, current, computation) {
+    let expressionObj = {
+      expression: `${prev.toString()} ${op.toString()} ${current.toString()} = ${computation.toString()}`,
+    };
+    expressionObj = JSON.stringify(expressionObj);
+    return expressionObj;
+  }
+
+  postToHistory(expression) {
+    window.fetch('/api/history', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: expression,
+    });
+  }
+}
+
+```
 
 ### Deploy
 
