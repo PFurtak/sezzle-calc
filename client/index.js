@@ -1,8 +1,14 @@
 class Calc {
-  constructor(prevOpTextElement, currentOpTextElement, expressionTextElement) {
+  constructor(
+    prevOpTextElement,
+    currentOpTextElement,
+    expressionTextElement,
+    socket
+  ) {
     this.prevOpTextElement = prevOpTextElement;
     this.currentOpTextElement = currentOpTextElement;
     this.expressionTextElement = expressionTextElement;
+    this.socket = socket;
     this.readyToReset = false;
     this.clear();
     this.renderHistory();
@@ -66,6 +72,7 @@ class Calc {
     this.currentOp = computation;
     this.op = undefined;
     this.prevOp = '';
+    this.socket.emit('post', 'posted to db');
   }
 
   getDisplayNumber(number) {
@@ -130,6 +137,8 @@ class Calc {
   }
 }
 
+const socket = io();
+
 const numButtons = document.querySelectorAll('[data-num]');
 const opButtons = document.querySelectorAll('[data-op]');
 const equalsButton = document.querySelector('[data-equal]');
@@ -142,7 +151,8 @@ const expressionTextElement = document.querySelector('[data-expressions]');
 const calculator = new Calc(
   prevOpTextElement,
   currentOpTextElement,
-  expressionTextElement
+  expressionTextElement,
+  socket
 );
 
 numButtons.forEach((button) => {
@@ -180,4 +190,8 @@ acButton.addEventListener('click', (button) => {
 deleteButton.addEventListener('click', (button) => {
   calculator.delete();
   calculator.updateDisplay();
+});
+
+socket.on('post', () => {
+  calculator.renderHistory(), 3000;
 });
