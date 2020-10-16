@@ -45,8 +45,8 @@ body {
   justify-content: center;
   align-content: center;
   min-height: 100vh;
-  grid-template-columns: repeat(4, 100px);
-  grid-template-rows: minmax(120px, auto) repeat(6, 100px);
+  grid-template-columns: repeat(4, 90px);
+  grid-template-rows: minmax(108px, auto) repeat(6, 90px);
 }
 
 .calc-grid > button {
