@@ -72,9 +72,12 @@ The steps above will connect the app to your own instance to of MongoDB.
 
 ### TODO / Things That Would Make The App Better
 
-- Media Queries on calculator grid sizes. For the most part the app is mobile friendly, but smaller phones do require some lateral scrolling.
+- ~~Media Queries on calculator grid sizes. For the most part the app is mobile friendly, but smaller phones do require some lateral scrolling.~~
+
+Calculator size has been adjusted for better mobile experience
 
 - ~~Remove JQuery and update client socketIO code. This was my first time working with SocketIO, so I adapted the documentation to get a working result. If I had more time, I would local install the socketIO client library, and refactor the socket scripts out of the HTML script tag. The socket emit should also occur at computation, rather than on click of the equals button. I would also opt to use plain JavaScript rather than JQuery.~~
+
 The above issues regarding JQuery and socket code have been fixed.
 
 - ~~Break up the functions getHistoryAndRender and marshallAndSend:~~
@@ -109,7 +112,7 @@ marshallAndSend(prev, op, current, computation) {
 
 ~~We could gain much better testability, scalability, and more efficient code re-use by making these functions do one thing and do it well.~~
 
-Refactored to:
+The above code was refactored to:
 
 ```javascript
 
